@@ -1,5 +1,5 @@
-export class Queue {
-  queue: any[]
+export class Queue<DataType> {
+  private queue: DataType[]
   maxLength: number
   constructor(maxLength) {
     if (maxLength < 0) {
@@ -14,7 +14,7 @@ export class Queue {
    * @param data string to be inserted
    * @returns queue position if success, -1 if failed to insert
    */
-  enqueue(data: string): number {
+  enqueue<DataType>(data: DataType): number {
     throw new Error("method not implemented");
   }
 
@@ -52,7 +52,7 @@ export class Queue {
   }
 }
 
-Queue.prototype.enqueue = function (data: string): number {
+Queue.prototype.enqueue = function <DataType>(data: DataType): number {
   if (this.queue.length > this.maxLength) {
     return -1;
   }
@@ -60,7 +60,7 @@ Queue.prototype.enqueue = function (data: string): number {
   return this.queue.length;
 }
 
-Queue.prototype.dequeue = function (): string {
+Queue.prototype.dequeue = function <Type>(): Type {
   if (this.queue.length <= 0) {
     throw new Error("Cannot remove element from empty queue");
   }
