@@ -5,6 +5,10 @@ import { Queue } from "./queue";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { ThreeJSQueue } from "./queueVisuals";
 
+
+document.getElementById("enqueue")?.addEventListener("click", queueCube, false);
+
+
 const scene = new THREE.Scene();
 const colors = [
   "red",
@@ -53,10 +57,7 @@ document.body.appendChild(renderer.domElement);
 renderer.render(scene, camera);
 
 
-const queue = new ThreeJSQueue(10, scene, 0);
-queue.enqueueAnimate("first", createCube(1, colors[Math.random() * 2]), new THREE.Vector3(1, 1, 1));
-queue.enqueueAnimate("second", createCube(1, "red"), new THREE.Vector3(1, 1, 1));
-queue.enqueueAnimate("second", createCube(1, "red"), new THREE.Vector3(1, 1, 1));
+const queue = new ThreeJSQueue(100, scene, 0);
 
 function animate() {
   requestAnimationFrame(animate);
@@ -64,5 +65,9 @@ function animate() {
   renderer.render(scene, camera);
 }
 animate();
+
+function queueCube() {
+  queue.enqueueAnimate(`${queue.getLength()}`, createCube(1, colors[Math.round(Math.random() * 2)]), new THREE.Vector3(1, 1, 1));
+}
 
 

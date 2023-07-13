@@ -1,0 +1,9 @@
+body {
+  margin: 0
+}
+
+#enqueue {
+  margin: 5px;
+  padding: 10px;
+  position: fixed;
+}
