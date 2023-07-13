@@ -8,19 +8,26 @@ type queueData = {
   dimensions: Vector3
 }
 
+type movementData = {
+  curPos: Vector3
+  desiredPos: Vector3
+  velocity: Vector3
+}
+
 export class ThreeJSQueue extends Queue<queueData> {
   scene: Scene
   cubeLength: number;
   groundPos: number;
   queuePosLength: number;
   posOffset: number;
-
+  movementAnimations: Array<movementData>
   constructor(maxLength, scene, groundPos) {
     super(maxLength);
     this.scene = scene;
     this.groundPos = groundPos;
     this.queuePosLength = 0;
     this.posOffset = 1;
+    this.movementAnimations = [];
   }
   /**
    * 
@@ -33,6 +40,10 @@ export class ThreeJSQueue extends Queue<queueData> {
   }
 
   dequeueAnimate(): void {
+    throw new Error("method not implemeneted");
+  }
+
+  animateMovements(): void {
     throw new Error("method not implemeneted");
   }
 }
@@ -58,5 +69,24 @@ ThreeJSQueue.prototype.enqueueAnimate = function (this: ThreeJSQueue, name: stri
 }
 
 ThreeJSQueue.prototype.dequeueAnimate = function (this: ThreeJSQueue): void {
+  const data = this.dequeue<queueData>();
+  console.log(data);
+  this.scene.remove(data.objectRef);
 
+  const queueGapDistance = data.dimensions.x + this.posOffset;
+  this.queuePosLength -= queueGapDistance;
+  this.queue.forEach((obj: queueData) => {
+    const newPos = obj.objectRef.position.x + queueGapDistance;
+    obj.objectRef.position.x = newPos;
+  })
+}
+
+ThreeJSQueue.prototype.animateMovements = function (this: ThreeJSQueue): void {
+
+}
+
+function move(movementData: movementData) {
+  const acceleration = 1;
+  const directionVector = movementData.curPos.sub(movementData.desiredPos).normalize();
+  console.log(move);
 }

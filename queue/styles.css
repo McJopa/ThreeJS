@@ -7,3 +7,10 @@ body {
   padding: 10px;
   position: fixed;
 }
+
+#dequeue {
+  top: 50px;
+  margin: 5px;
+  padding: 10px;
+  position: fixed;
+}

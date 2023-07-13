@@ -25,7 +25,7 @@ export class Queue<DataType> {
    * Throws an error if queue is empty
    * @returns data from removed element
    */
-  dequeue(): string {
+  dequeue<DataType>(): DataType {
     throw new Error("method not implemeneted");
   }
 
