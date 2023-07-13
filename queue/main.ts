@@ -3,19 +3,20 @@ import { createGround } from "./world";
 import { createCube } from "./objects";
 import { Queue } from "./queue";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { ThreeJSQueue } from "./queueVisuals";
 
 const scene = new THREE.Scene();
-
-const queue = new Queue(10);
-queue.enqueue("first");
-
-
+const colors = [
+  "red",
+  "green",
+  "blue"
+]
 // lighting setup 
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
 scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-directionalLight.posititon = new THREE.Vector3(200, 500, 300);
+directionalLight.position.set(200, 500, 300);
 scene.add(directionalLight);
 
 scene.background = new THREE.Color("skyblue")
@@ -36,24 +37,32 @@ camera.lookAt(0, 2, 0);
 const plane = createGround(200, 10, "white");
 scene.add(plane);
 
-const cubeLength = 1;
-const cube = createCube(cubeLength, "red");
-cube.position.y += cubeLength / 2
-scene.add(cube);
+// const cubeLength = 1;
+// const cube = createCube(cubeLength, "red");
+// cube.position.y += cubeLength / 2
+// scene.add(cube);
 
 // renderer setup 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.render(scene, camera);
 
-// const controls = new OrbitControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
 
 document.body.appendChild(renderer.domElement);
 renderer.render(scene, camera);
 
+
+const queue = new ThreeJSQueue(10, scene, 0);
+queue.enqueueAnimate("first", createCube(1, colors[Math.random() * 2]), new THREE.Vector3(1, 1, 1));
+queue.enqueueAnimate("second", createCube(1, "red"), new THREE.Vector3(1, 1, 1));
+queue.enqueueAnimate("second", createCube(1, "red"), new THREE.Vector3(1, 1, 1));
+
 function animate() {
   requestAnimationFrame(animate);
-  // controls.update();
+  controls.update();
   renderer.render(scene, camera);
 }
 animate();
+
+

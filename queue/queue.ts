@@ -1,5 +1,7 @@
+import { RGBADepthPacking } from "three";
+
 export class Queue<DataType> {
-  private queue: DataType[]
+  queue: DataType[]
   maxLength: number
   constructor(maxLength) {
     if (maxLength < 0) {
@@ -52,7 +54,7 @@ export class Queue<DataType> {
   }
 }
 
-Queue.prototype.enqueue = function <DataType>(data: DataType): number {
+Queue.prototype.enqueue = function <DataType>(this: Queue<DataType>, data: DataType): number {
   if (this.queue.length > this.maxLength) {
     return -1;
   }
@@ -60,18 +62,22 @@ Queue.prototype.enqueue = function <DataType>(data: DataType): number {
   return this.queue.length;
 }
 
-Queue.prototype.dequeue = function <Type>(): Type {
+Queue.prototype.dequeue = function <DataType>(this: Queue<DataType>): DataType {
   if (this.queue.length <= 0) {
     throw new Error("Cannot remove element from empty queue");
   }
-  return this.queue.shift;
+  const val = this.queue.shift();
+  if (val == undefined) {
+    throw new Error("returned undefined value from shift");
+  }
+  return val;
 }
 
-Queue.prototype.getLength = function () {
+Queue.prototype.getLength = function (this: Queue<any>) {
   return this.queue.length;
 }
 
-Queue.prototype.isFull = function () {
+Queue.prototype.isFull = function (this: Queue<any>) {
   if (this.queue.length == this.maxLength) {
     return true;
   } else {
@@ -79,12 +85,10 @@ Queue.prototype.isFull = function () {
   }
 }
 
-Queue.prototype.isEmpty = function () {
+Queue.prototype.isEmpty = function (this: Queue<any>) {
   if (this.queue.length == 0) {
     return true;
   } else {
     return false;
   }
 }
-
-
