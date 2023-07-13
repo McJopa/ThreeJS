@@ -42,8 +42,8 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100000
 )
-camera.position.set(0, 5, 10);
-camera.lookAt(0, 2, 0);
+camera.position.set(10, 5, 5);
+camera.lookAt(0, 0, 0);
 
 
 // world setup
@@ -60,20 +60,21 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.render(scene, camera);
 
-const controls = new OrbitControls(camera, renderer.domElement);
+// const controls = new OrbitControls(camera, renderer.domElement);
 
 document.body.appendChild(renderer.domElement);
 renderer.render(scene, camera);
 
 
-const queue = new ThreeJSQueue(100, scene, 0);
+const queue = new ThreeJSQueue(10, scene, 0);
 let clockElapsedTime = 0;
 function animate() {
   requestAnimationFrame(animate);
-  controls.update();
+  // controls.update();
   renderer.render(scene, camera);
   autoRun();
   clockElapsedTime = Math.round(clock.getElapsedTime());
+  queue.animateMovements();
 }
 animate();
 
@@ -87,7 +88,7 @@ function dequeueCube() {
 
 function autoRun() {
   if (clockElapsedTime != Math.round(clock.getElapsedTime())) {
-    if (Math.random() > 0.25) {
+    if (Math.random() > 0.3) {
       if (!queue.isFull()) {
         queueCube();
       }
