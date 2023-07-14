@@ -50,8 +50,8 @@ export class ThreeJSQueue extends Queue<queueData> {
 }
 
 ThreeJSQueue.prototype.enqueueAnimate = function (this: ThreeJSQueue, name: string, objectRef: Mesh, dimensions: Vector3): void {
+
   const pos = new Vector3(-this.queuePosLength + this.posOffset, this.groundPos + dimensions.y / 2, 0);
-  this.queuePosLength += this.posOffset + dimensions.x;
 
   objectRef.position.x = pos.x;
   objectRef.position.y = 30;
@@ -62,10 +62,13 @@ ThreeJSQueue.prototype.enqueueAnimate = function (this: ThreeJSQueue, name: stri
     objectRef: objectRef,
     dimensions
   }
+
   // console.log(data);
   if (this.enqueue<queueData>(data) == -1) {
     throw new Error("error inserting into the queue");
   };
+
+  this.queuePosLength += this.posOffset + dimensions.x;
   this.scene.add(objectRef);
   const movementData = {
     curPos: objectRef.position,

@@ -42,8 +42,9 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100000
 )
-camera.position.set(10, 5, 5);
-camera.lookAt(0, 0, 0);
+camera.position.set(5, 2, 1.5);
+camera.lookAt(-2, 1, 0);
+camera.zoom = .2;
 
 
 // world setup
