@@ -1,6 +1,5 @@
 import { Queue } from "./queue";
 import { Mesh, Vector3, Scene, Vector } from "three"
-import { createCube } from "./objects";
 
 type queueData = {
   name: string
@@ -111,7 +110,7 @@ ThreeJSQueue.prototype.animateMovements = function (this: ThreeJSQueue): void {
   if (this.movementAnimations.length == 0) {
     return;
   }
-  console.log("animating")
+  // console.log("animating")
   const lerpAlpha = .1
   this.movementAnimations.forEach(obj => {
     obj.curPos.lerp(obj.desiredPos, lerpAlpha);
@@ -120,7 +119,7 @@ ThreeJSQueue.prototype.animateMovements = function (this: ThreeJSQueue): void {
   this.movementAnimations = this.movementAnimations.filter((obj: movementData) =>
     !obj.curPos.equals(obj.desiredPos)
   )
-  console.log(this.movementAnimations);
+  // console.log(this.movementAnimations);
 }
 
 // function move(movementData: movementData) {

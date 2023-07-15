@@ -3,15 +3,8 @@ import { createGround } from "./world";
 import { createCube } from "./objects";
 import { Queue } from "./queue";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GUI } from "dat.gui"
 import { ThreeJSQueue } from "./queueVisuals";
-
-
-document.getElementById("enqueue")?.addEventListener("click", queueCube, false);
-document.getElementById("dequeue")?.addEventListener("click", dequeueCube, false);
-
-const clock = new THREE.Clock(true);
-clock.start();
-const scene = new THREE.Scene();
 
 var colorArray = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
   '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
@@ -24,17 +17,37 @@ var colorArray = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
   '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
   '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
 
-// lighting setup 
+
+
+document.getElementById("enqueue")?.addEventListener("click", queueCube, false);
+document.getElementById("dequeue")?.addEventListener("click", dequeueCube, false);
+
+const clock = new THREE.Clock(true);
+clock.start();
+let clockElapsedTime = 0;
+
+const scene = new THREE.Scene();
+
+
+// LIGHTING SETUP 
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
 scene.add(ambientLight);
-
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-directionalLight.position.set(200, 500, 300);
-scene.add(directionalLight);
+directionalLight.position.set(25, 30, -15);
+directionalLight.castShadow = true;
+directionalLight.shadow.mapSize.width = 20000
+directionalLight.shadow.mapSize.height = 20000
+let d = 100;
+directionalLight.shadow.camera.left = -d;
+directionalLight.shadow.camera.right = d;
+directionalLight.shadow.camera.top = d;
+directionalLight.shadow.camera.bottom = -d;
 
+directionalLight.shadow.radius = 1;
+scene.add(directionalLight);
 scene.background = new THREE.Color("skyblue")
 
-// camera setup
+// CAMERA SETUP 
 const aspectRatio = window.innerWidth / window.innerHeight;
 const camera = new THREE.PerspectiveCamera(
   50,
@@ -42,33 +55,29 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100000
 )
-camera.position.set(5, 2, 1.5);
-camera.lookAt(-2, 1, 0);
-camera.zoom = .2;
+camera.position.set(6, 1.6, 1.4);
+// camera.rotation.set(0, 7.62, 0.00);
+camera.lookAt(-4, 1, -2);
 
-
-// world setup
+// WORLD SETUP 
 const plane = createGround(200, 10, "white");
+plane.receiveShadow = true;
 scene.add(plane);
 
-// const cubeLength = 1;
-// const cube = createCube(cubeLength, "red");
-// cube.position.y += cubeLength / 2
-// scene.add(cube);
-
-// renderer setup 
+// RENDER SETUP 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
 renderer.render(scene, camera);
-
-// const controls = new OrbitControls(camera, renderer.domElement);
-
 document.body.appendChild(renderer.domElement);
 renderer.render(scene, camera);
 
-
+// QUEUE SETUP
 const queue = new ThreeJSQueue(10, scene, 0);
-let clockElapsedTime = 0;
+
+// const controls = new OrbitControls(camera, renderer.domElement);
+
+// ANINMATE LOOP
 function animate() {
   requestAnimationFrame(animate);
   // controls.update();
@@ -76,17 +85,44 @@ function animate() {
   autoRun();
   clockElapsedTime = Math.round(clock.getElapsedTime());
   queue.animateMovements();
+  camera.updateProjectionMatrix()
 }
 animate();
 
+// ONCLICK CALLBACKS 
 function queueCube() {
   queue.enqueueAnimate(`${queue.getLength()}`, createCube(1, colorArray[Math.round(Math.random() * colorArray.length)]), new THREE.Vector3(1, 1, 1));
 }
-
 function dequeueCube() {
   queue.dequeueAnimate();
 }
+addEventListener("resize", (event) => { });
+onresize = (event) => {
+  const aspectRatio = window.innerWidth / window.innerHeight;
+  // console.log(event);
+  // console.log(aspectRatio)
+  camera.aspect = aspectRatio
+  renderer.setSize(window.innerWidth, window.innerHeight);
+};
 
+const gui = new GUI()
+const cameraFolder = gui.addFolder('Camera')
+cameraFolder.add(camera.position, 'x', 0, 10)
+cameraFolder.add(camera.position, 'y', 0, 10)
+cameraFolder.add(camera.position, 'z', 0, 10)
+
+cameraFolder.add(camera.rotation, 'x', -10, 10)
+cameraFolder.add(camera.rotation, 'y', -10, 10)
+cameraFolder.add(camera.rotation, 'z', -10, 10)
+
+
+cameraFolder.add(camera, 'zoom', 0, 10)
+cameraFolder.open()
+
+const helper = new THREE.CameraHelper(directionalLight.shadow.camera);
+scene.add(helper);
+
+// randomly queue and dequeue objects
 function autoRun() {
   if (clockElapsedTime != Math.round(clock.getElapsedTime())) {
     if (Math.random() > 0.3) {
