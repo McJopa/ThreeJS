@@ -3,6 +3,7 @@ import { createCube } from "./components/cube";
 import { createRenderer } from "./systems/renderer";
 import { createScene } from "./components/scene";
 import { Resizer } from "./systems/Resizer";
+import { createLight } from "./components/lights";
 
 import type { PerspectiveCamera, Scene, WebGLRenderer } from "three";
 
@@ -16,8 +17,9 @@ class World {
     this.renderer = createRenderer();
     container.appendChild(this.renderer.domElement);
 
+    const light = createLight();
     const cube = createCube();
-    this.scene.add(cube);
+    this.scene.add(cube, light);
 
     const resizer = new Resizer(container, this.camera, this.renderer);
   }

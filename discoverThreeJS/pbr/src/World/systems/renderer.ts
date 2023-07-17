@@ -1,9 +1,7 @@
 import { WebGLRenderer } from "three";
 
 function createRenderer() {
-  const renderer: WebGLRenderer = new WebGLRenderer();
-
-  renderer.physicallyCorrectLights = true;
+  const renderer = new WebGLRenderer();
 
   return renderer;
 }
