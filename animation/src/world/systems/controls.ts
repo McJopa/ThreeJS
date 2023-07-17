@@ -1,7 +1,8 @@
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { OrbitControls } from 'three-addons';
 
-export function createControls(camera: THREE.Camera, canvas: THREE.WebGLRenderer) {
+import type { Camera, WebGLRenderer } from "three"
+
+export function createControls(camera: Camera, canvas: WebGLRenderer) {
   const controls: OrbitControls = new OrbitControls(camera, canvas);
-  controls.
   return controls;
 }
