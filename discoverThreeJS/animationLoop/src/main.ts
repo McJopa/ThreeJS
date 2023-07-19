@@ -9,8 +9,23 @@ function main() {
   }
 
   const world = new World(container);
+  const startButton = document.querySelector('#startButton');
+  const stopButton = document.querySelector('#stopButton');
+  if (!stopButton) {
+    console.log("could not find stop button");
+  }
+  if (!startButton) {
+    console.log("could not find start button");
+  }
+  stopButton?.addEventListener("click", () => {
+    world.stop();
+  })
+  startButton?.addEventListener("click", () => {
+    world.start();
+  })
 
-  world.render();
+  world.start();
 }
+
 
 main();
