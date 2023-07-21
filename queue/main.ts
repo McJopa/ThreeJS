@@ -160,6 +160,8 @@ const gui = new Interface(camera, queueControls, queue);
 // const helper = new THREE.CameraHelper(directionalLight.shadow.camera);
 // scene.add(helper);
 
+//test
+
 // randomly queue and dequeue objects
 function autoRun() {
   if (clockElapsedTime != Math.round(clock.getElapsedTime())) {
