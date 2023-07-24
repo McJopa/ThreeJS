@@ -1,49 +1,34 @@
 import { createCamera } from "./components/camera";
-import { createCube } from "./components/cube";
 import { createRenderer } from "./systems/renderer";
 import { createScene } from "./components/scene";
-import { createLight, createAmbientLight } from "./components/lights";
+import { createLights } from "./components/lights";
 
-import { HemisphereLight } from "three";
-
-import { EXRLoader } from "three/addons/loaders/EXRLoader"
+import { createControls } from "./systems/controls";
 
 import { Resizer } from "./systems/Resizer";
 import { Loop } from "./systems/Loop";
 
-import { AmbientLight, DirectionalLightHelper, type PerspectiveCamera, type Scene, type WebGLRenderer } from "three";
+import type { PerspectiveCamera, Scene, WebGLRenderer } from "three";
 
 class World {
-  private camera: PerspectiveCamera
-  private scene: Scene
-  private renderer: WebGLRenderer
-  private loop: Loop
+  private camera: PerspectiveCamera;
+  private scene: Scene;
+  private renderer: WebGLRenderer;
+  private loop: Loop;
   constructor(container: Element) {
     this.camera = createCamera();
     this.scene = createScene();
     this.renderer = createRenderer();
-    this.loop = new Loop(this.camera, this.scene, this.renderer)
+    this.loop = new Loop(this.camera, this.scene, this.renderer);
     container.appendChild(this.renderer.domElement);
+    const controls = createControls(this.camera, this.renderer.domElement);
 
-    const light = createLight();
-    const light2 = createLight();
-    light2.position.set(0, 0, 10);
-    const helper = new DirectionalLightHelper(light, 10);
-    const ambientLight = createAmbientLight();
-    const cube = createCube();
+    const { mainLight, ambientLight } = createLights();
 
-    this.loop.updatables.push(cube);
-    const envMap = new EXRLoader().load('/assets/textures/envMap.exr');
+    this.loop.updatables.push(controls);
 
-    this.scene.add(cube, light, light2, helper, ambientLight);
+    this.scene.add(mainLight, ambientLight);
 
-    const hemiLight = new HemisphereLight(0xffffff, 0x8d8d8d, 3);
-    hemiLight.position.set(0, 20, 0);
-    this.scene.add(hemiLight);
-
-    console.log('added ambient Light');
-
-    this.scene.background = envMap;
     const resizer = new Resizer(container, this.camera, this.renderer);
   }
   render() {
