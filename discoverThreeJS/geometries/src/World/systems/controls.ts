@@ -8,6 +8,7 @@ function createControls(
 ): OrbitControls & Ticker {
   const controls: OrbitControls & Ticker = new OrbitControls(camera, canvas);
   controls.enableDamping = true;
+  controls.target.y = 1;
   controls.tick = () => controls.update();
 
   return controls;

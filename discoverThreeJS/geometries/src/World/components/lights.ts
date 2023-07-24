@@ -5,10 +5,10 @@ function createLights() {
   const ambientLight = new HemisphereLight(
     "white",
     "darkslategray",
-    10 * Math.PI
+    3 * Math.PI
   );
 
-  const mainLight = new DirectionalLight("white", 5 * Math.PI);
+  const mainLight = new DirectionalLight("white", 2 * Math.PI);
   mainLight.position.set(10, 10, 10);
   return { ambientLight, mainLight };
 }

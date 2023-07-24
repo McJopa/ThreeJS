@@ -11,6 +11,7 @@ import { Resizer } from "./systems/Resizer";
 import { Loop } from "./systems/Loop";
 
 import type { PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { Train } from "./components/Train/Train";
 
 class World {
   private camera: PerspectiveCamera;
@@ -23,17 +24,17 @@ class World {
     this.renderer = createRenderer();
     this.loop = new Loop(this.camera, this.scene, this.renderer);
     container.appendChild(this.renderer.domElement);
+
     const controls = createControls(this.camera, this.renderer.domElement);
-
     const { ambientLight, mainLight } = createLights();
+    const train = new Train();
 
-    const gridHelper = createGridHelper();
-    const axesHelper = createAxesHelper();
-    this.loop.updatables.push(controls);
+    this.scene.add(mainLight, ambientLight, train);
 
-    this.scene.add(mainLight, ambientLight, gridHelper, axesHelper);
-
+    this.loop.updatables.push(controls, train);
     const resizer = new Resizer(container, this.camera, this.renderer);
+
+    this.scene.add(createAxesHelper(), createGridHelper());
   }
   render() {
     this.renderer.render(this.scene, this.camera);
