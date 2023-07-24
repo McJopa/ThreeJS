@@ -2,7 +2,8 @@ import { createCamera } from "./components/camera";
 import { createRenderer } from "./systems/renderer";
 import { createScene } from "./components/scene";
 import { createLights } from "./components/lights";
-import { createMeshGroup } from "./components/meshGroup";
+
+import { createAxesHelper, createGridHelper } from "./systems/helpers";
 
 import { createControls } from "./systems/controls";
 
@@ -25,11 +26,12 @@ class World {
     const controls = createControls(this.camera, this.renderer.domElement);
 
     const { ambientLight, mainLight } = createLights();
-    const meshGroup = createMeshGroup();
 
-    this.loop.updatables.push(controls, meshGroup);
+    const gridHelper = createGridHelper();
+    const axesHelper = createAxesHelper();
+    this.loop.updatables.push(controls);
 
-    this.scene.add(mainLight, ambientLight, meshGroup);
+    this.scene.add(mainLight, ambientLight, gridHelper, axesHelper);
 
     const resizer = new Resizer(container, this.camera, this.renderer);
   }
