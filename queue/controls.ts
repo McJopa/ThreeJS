@@ -6,6 +6,8 @@ function createControls(
   renderer: Renderer
 ): OrbitControls {
   const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.enablePan = false;
   return controls;
 }
 

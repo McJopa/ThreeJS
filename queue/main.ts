@@ -113,14 +113,12 @@ let queueInitialLength = 15;
 const queue = new ThreeJSQueue(queueInitialLength, scene, 0);
 
 // const controls = new OrbitControls(camera, renderer.domElement);
-const controls = createControls(camera, renderer);
-controls.enableDamping = true;
-controls.enablePan = false;
+// const controls = createControls(camera, renderer);
 
 // ANINMATE LOOP
 function animate() {
   requestAnimationFrame(animate);
-  controls.update();
+  // controls.update();
   renderer.render(scene, camera);
   autoRun();
   clockElapsedTime = Math.round(clock.getElapsedTime());
